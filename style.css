@@ -1,0 +1,224 @@
+body {
+    text-transform: capitalize;
+    margin: 0;
+    background-image: url('./img/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: "Roboto", sans-serif;
+}
+
+.edit-pokecards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.designed-cards{
+    width: 400px;
+    height: 280px;
+    color: rgb(204, 204, 204);
+    font-size: 24px;
+    margin: 20px 20px;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 40px;
+    border-top-left-radius: 3px;
+    transition: transform 0.5s ease; 
+}
+
+.pokemon-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    letter-spacing: 2px;
+}
+
+.type-info-small-card {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-formantion {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    gap: 15px;
+    margin-left: 40px;
+}
+
+.poke-image {
+    height: 230px;
+    filter: drop-shadow(16px 7px 8px black);
+    transition: transform 0.5s ease; 
+}
+
+.designed-cards:hover {
+    cursor: pointer;
+    transform: scale(0.90); 
+    transition: transform 0.5s ease-in-out;
+}
+
+.poke-image:hover {
+    transform: scale(1.10); 
+    transition: transform 0.5s ease-in-out;
+}
+
+.info-letter-style{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 45px;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    font-size: 28px;
+}
+
+#popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; 
+}
+
+#popupContent {
+    background: #fff; 
+    min-width: 500px;
+    max-width: 500px;
+    min-height: 620px;
+    max-height: 620px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+    border-radius: 10px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+}
+
+.small-image {
+    width: 30%;
+    height: auto;
+}
+
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0.9);
+    width: 100%;
+    height: 45px;
+    border-radius: 15px;
+    font-size: 25px;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sub-navbar {
+    display: flex;
+    align-items: center;
+    padding-inline-start: 0;
+    gap: 50px;
+}
+
+.text-decorations{
+    color: #fff;
+    list-style-type: none;
+}
+
+.name-edit-popup {
+    background-color: rgba(0, 0, 0, 0.9);
+    width: 100%;
+    height: 45px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    color: #fff;
+}
+
+.text-decorations:hover {
+    color: red;
+    cursor: pointer;
+}
+
+.popup-image{
+    filter: drop-shadow(16px 16px 8px black);
+    height: 250px;
+    transition: transform 0.3s;
+}
+
+.popup-image:hover {
+    transform: scale(1.5);
+    transition: transform 0.3s;
+}
+
+.setup-popup-image {
+    display: flex;
+    justify-content: center;
+}
+
+.popup-section {
+    background-color: rgba(255, 254, 254, 0.9);
+    min-height: 50px;
+    border-radius: 15px;
+    max-height: 300px;
+}
+
+.info-field{
+    margin-top: 20px;
+}
+
+.setup-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    margin: 0 20px;
+    font-size: 20px;
+}
+
+.stat-name {
+    flex: 1;
+    text-align: left;
+}
+
+.stat-number {
+    flex: 1;
+    text-align: right;
+}
+
+.popup-section-info{
+    display: none;
+}
+
+.popup-section-moves{
+    display: none;
+}
