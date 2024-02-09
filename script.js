@@ -121,6 +121,8 @@ function openPopup(i) {
     let name = pokemon['species']['name'];
     let pokemonImage = pokemon['sprites']['other']['official-artwork']['front_default'];
     let type = pokemon['types'][0]['type']['name'];
+    let weight = pokemon['weight'];
+    let height = pokemon['height'];
 
     let popupContent = `
         <div id="popupOverlay">
@@ -133,15 +135,24 @@ function openPopup(i) {
                 </div>
                 <div class="navbar">
                     <ul class="sub-navbar">
-                        <li class="text-decorations">Information</li>
-                        <li class="text-decorations" onclick="pokemonStats(${i})">Statistics</li>
+                        <li class="text-decorations" onclick="showTab('popupInformation', ${i})">Information</li>
+                        <li class="text-decorations" onclick="showTab('popupStatistics', ${i})">Statistics</li>
                         <li class="text-decorations">Moves</li>
                     </ul>        
                 </div>
                 <div class="info-field">
-                    <div id="popupStatistics" class="popup-section"></div>
-                    <div id="popupInformation" class="popup-section-info"></div>
-                    <div id="popupMoves" class="popup-section-moves"></div>
+                    <div id="popupStatistics" class="popup-section d-none"></div>
+                    <div id="popupInformation" class="popup-section-info d-none">
+                      <div>    
+                          <span>Height:</span>
+                          <span>${weight}ft.</span>
+                      </div>
+                      <div>    
+                          <span>Weight:</span>
+                          <span>${height}Pounds</span>
+                      </div>
+                    </div>
+                    <div id="popupMoves" class="popup-section-moves d-none"></div>
                 </div>
                 <span onclick="closePopup()" class="close-button">&times;</span>
             </div>
@@ -149,14 +160,43 @@ function openPopup(i) {
     `;
 
     document.getElementById('openBigCard').innerHTML = popupContent;
+  }
 
+  function showTab(tabId, i) {
+    document.getElementById('popupStatistics').classList.add('d-none');
+    document.getElementById('popupInformation').classList.add('d-none');
+    document.getElementById('popupMoves').classList.add('d-none');
 
-}
+    document.getElementById(tabId).classList.remove('d-none');
 
-function pokemonInfo(i, type1, type2) {
+    if (tabId === 'popupStatistics') {
+      pokemonStats(i);
+    } else if (tabId === 'popupInformation') {
+      pokemonInfo(i);
+    }
+  }
+
+  function closePopup() {
+    document.getElementById('openBigCard').innerHTML = '';
+  }
+
+function pokemonInfo(i) {
     const pokemon = foundedPokemons[i];
-}
+    let weight = pokemon['weight'];
+    let height = pokemon['height'];
+    let informationContent =`
+        <div>    
+            <span>Height:</span>
+            <span>${weight}ft.</span>
+        </div>
+        <div>    
+            <span>Weight:</span>
+            <span>${height}Pounds</span>
+        </div>
+    `;
 
+    document.getElementById('popupInformation').innerHTML = informationContent;
+}
 
 function closePopup() {
     document.getElementById('openBigCard').innerHTML = '';

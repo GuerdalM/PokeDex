@@ -222,3 +222,11 @@ body {
 .popup-section-moves{
     display: none;
 }
+
+.popup-section-info {
+    color: black;
+}
+
+.d-none {
+    display: none;
+  }
