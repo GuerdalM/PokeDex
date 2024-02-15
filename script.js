@@ -2,6 +2,7 @@ let showMaxPokemon = 30;
 let foundedPokemons = [];
 let pokeStats = [];
 let pokeStatsName = [];
+let moveAttack = [];
 
 
 async function init() {
@@ -19,75 +20,80 @@ async function foundInGrass() {
             foundedPokemons.push(currentPokemon);
             console.log('Zeige mir', currentPokemon);
         } else {
-            console.error(`Fehler beim Abrufen von Pokemon mit ID ${i}`);
+            console.error(`Cant find ${i} in the high Grass`);
         }
     }
 }
 
 function catchEmAllImage(type) {
-    switch (type.toLowerCase()) {
-        case 'grass':
-            return 'url(./img/grass.jpg)';
-        case 'electric':
-            return 'url(./img/electric.jpg)';
-        case 'fire':
-            return 'url(./img/fire.jpg)';
-        case 'normal':
-            return 'url(./img/normal.jpg)';
-        case 'water':
-            return 'url(./img/water.jpg)';
-        case 'ground':
-            return 'url(./img/ground.jpg)';
-        case 'poison':
-            return 'url(./img/poisen.jpg)';
-        case 'bug':
-            return 'url(./img/bug.jpg)';
-        case 'fighting':
-            return 'url(./img/fighting.jpg)';
-        default:
-            return 'url(./img/default-img.jpg)';
-    }
+    const imagePath = `./img/${type.toLowerCase()}.jpg`;
+    return `url(${imagePath})`;
 }
 
-function renderPokemon(i, type1, type2) {
+function renderPokemon() {
+    const card = document.getElementById('pokeCards');
+    
     for (let i = 0; i < foundedPokemons.length; i++) {
-        const pokemons = foundedPokemons[i];    
+        const pokemons = foundedPokemons[i];
+        const name = pokemons['species']['name'];
+        const pokemonImage = pokemons['sprites']['other']['official-artwork']['front_default'];
+        const type1 = pokemons['types'][0]['type']['name'];
+        const type2 = pokemons['types'][1] ? pokemons['types'][1]['type']['name'] : null;
 
-        let name = pokemons['species']['name'];
-        let pokemonImage = pokemons['sprites']['other']['official-artwork']['front_default'];
-        let type1 = pokemons['types'][0]['type']['name'];
-        let type2 = pokemons['types'][1] ? pokemons['types'][1]['type']['name'] : null;
-        let card = document.getElementById('pokeCards');
-        let backgroundImage = catchEmAllImage(type1)
-
-        card.innerHTML += `
-        <div onclick="openPopup(${i})" 
-             data-name="${name}" 
-             data-image="${pokemonImage}" 
-             class="designed-cards" 
-             style="background-image: ${backgroundImage};"
-             data-type="${type1}"> 
-            <div class="pokemon-name">
-                <span>${name}</span>
-            </div>
-            <div class="type-info-small-card">
-                <div class="card-formantion">              
-                    <span class="info-letter-style">${type1}</span>
-                    ${type2Check(type2)}
-                </div>
-                <img class="poke-image" src="${pokemonImage}">
-            </div>
-        </div>
-    `;
+        const pokemonCardHTML = createPokemonCard(i, name, pokemonImage, type1, type2);
+        card.innerHTML += pokemonCardHTML;
     }
 }
 
-function type2Check(type2) {
-    if (type2) {
-        return `<span class="info-letter-style">${type2}</span>`;
-    }
-    return '';
+function openPopup(i) {
+    const pokemon = foundedPokemons[i];
+    let name = pokemon['species']['name'];
+    let pokemonImage = pokemon['sprites']['other']['official-artwork']['front_default'];
+    let type = pokemon['types'][0]['type']['name'];
+    let nextPokemon = nextPopup(i);
+    let previousPokemon = previousPopup(i);
+
+    const popupContent = generatePopupContent(i, name, pokemonImage, type, nextPokemon, previousPokemon);
+
+    document.getElementById('openBigCard').innerHTML = popupContent;
+    document.body.classList.add('popup-open');
+
+    pokemonInfo(i);
+    showTab('popupInformation', i);
 }
+
+function nextPopup(i) {
+    let nextPokemon = i + 1;
+    if (nextPokemon >= foundedPokemons.length) {
+        nextPokemon = 0;
+    }
+    return nextPokemon;
+}
+
+function previousPopup(i) {
+    let previousPokemon = i - 1;
+    if (previousPokemon < 0) {
+        previousPokemon = foundedPokemons.length - 1;
+    }
+    return previousPokemon;
+}
+
+function showTab(tabId, i) {
+    document.getElementById('popupStatistics').classList.add('d-none');
+    document.getElementById('popupInformation').classList.add('d-none');
+    document.getElementById('popupMoves').classList.add('d-none');
+
+    document.getElementById(tabId).classList.remove('d-none');
+
+    if (tabId === 'popupInformation') {
+        pokemonInfo(i);
+    } else if (tabId === 'popupStatistics') {
+        pokemonStats(i);
+    } else if (tabId === 'popupMoves') {
+        pokemonMoves(i);
+    }
+  }
+
 function pokemonStats(i) {
     const pokemon = foundedPokemons[i];
     const stats = pokemon['stats'];
@@ -116,88 +122,70 @@ function pokemonStats(i) {
     renderPokeStatsChart();
 }
 
-function openPopup(i) {
+function collectMoves(i) {
     const pokemon = foundedPokemons[i];
-    let name = pokemon['species']['name'];
-    let pokemonImage = pokemon['sprites']['other']['official-artwork']['front_default'];
-    let type = pokemon['types'][0]['type']['name'];
-    let weight = pokemon['weight'];
-    let height = pokemon['height'];
+    const moves = pokemon['moves'];
+    let moveAttack = [];
 
-    let popupContent = `
-        <div id="popupOverlay">
-            <div id="popupContent" style="background-image: ${catchEmAllImage(type)};">
-                <div class="name-edit-popup">
-                    <span>${name}</span>
-                </div>
-                <div class="setup-popup-image">
-                    <img src="${pokemonImage}" class="popup-image">
-                </div>
-                <div class="navbar">
-                    <ul class="sub-navbar">
-                        <li class="text-decorations" onclick="showTab('popupInformation', ${i})">Information</li>
-                        <li class="text-decorations" onclick="showTab('popupStatistics', ${i})">Statistics</li>
-                        <li class="text-decorations">Moves</li>
-                    </ul>        
-                </div>
-                <div class="info-field">
-                    <div id="popupStatistics" class="popup-section d-none"></div>
-                    <div id="popupInformation" class="popup-section-info d-none">
-                      <div>    
-                          <span>Height:</span>
-                          <span>${weight}ft.</span>
-                      </div>
-                      <div>    
-                          <span>Weight:</span>
-                          <span>${height}Pounds</span>
-                      </div>
-                    </div>
-                    <div id="popupMoves" class="popup-section-moves d-none"></div>
-                </div>
-                <span onclick="closePopup()" class="close-button">&times;</span>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('openBigCard').innerHTML = popupContent;
-  }
-
-  function showTab(tabId, i) {
-    document.getElementById('popupStatistics').classList.add('d-none');
-    document.getElementById('popupInformation').classList.add('d-none');
-    document.getElementById('popupMoves').classList.add('d-none');
-
-    document.getElementById(tabId).classList.remove('d-none');
-
-    if (tabId === 'popupStatistics') {
-      pokemonStats(i);
-    } else if (tabId === 'popupInformation') {
-      pokemonInfo(i);
+    for (let m = 0; m < Math.min(moves.length, 20); m++) {
+        const attack = moves[m];
+        moveAttack.push(attack);
     }
-  }
 
-  function closePopup() {
-    document.getElementById('openBigCard').innerHTML = '';
-  }
+    return moveAttack;
+}
+
+function renderMoves(moveAttack) {
+    let movesHTML = `<div class="moves-section">`;
+
+    for (let a = 0; a < moveAttack.length; a++) {
+        movesHTML += `
+            <span class="moves-edit">${moveAttack[a]['move']['name']}</span>
+        `;
+    }
+
+    movesHTML += `</div>`;
+    return movesHTML;
+}
+
+function pokemonMoves(i) {
+    const moveAttack = collectMoves(i);
+    const movesHTML = renderMoves(moveAttack);
+
+    document.getElementById('popupMoves').innerHTML = movesHTML;
+}
+
+
 
 function pokemonInfo(i) {
     const pokemon = foundedPokemons[i];
-    let weight = pokemon['weight'];
-    let height = pokemon['height'];
-    let informationContent =`
-        <div>    
-            <span>Height:</span>
-            <span>${weight}ft.</span>
-        </div>
-        <div>    
-            <span>Weight:</span>
-            <span>${height}Pounds</span>
-        </div>
-    `;
+    let frontGif = pokemon['sprites']['other']['showdown']['back_default'];
+    let defaultGif = pokemon['sprites']['other']['showdown']['front_default'];
+    let frontGifShiny = pokemon['sprites']['other']['showdown']['front_shiny'];
+    let defaultGifShiny = pokemon['sprites']['other']['showdown']['back_shiny'];
+    let informationHTML ='';
 
-    document.getElementById('popupInformation').innerHTML = informationContent;
+    informationHTML += `
+
+    <div>
+        <span class="more-images-title"><b>Usual Version:</b></span>
+        <div class="more-images-container">
+            <img class="gif-edit" src="${frontGif}" alt="Front GIF">
+            <img class="gif-edit" src="${defaultGif}" alt="Default GIF">
+        </div>
+        <span class="more-images-title-shiny"><b>Shiny Version:</b></span>
+        <div class="more-images-container">
+            <img class="gif-edit" src="${defaultGifShiny}" alt="Default GIF Shiny">
+            <img class="gif-edit" src="${frontGifShiny}" alt="Front GIF Shiny">
+        </div>
+    </div>
+`;
+
+    document.getElementById('popupInformation').innerHTML = informationHTML;
 }
+
 
 function closePopup() {
     document.getElementById('openBigCard').innerHTML = '';
+    document.body.classList.remove('popup-open');
 }

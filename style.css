@@ -104,17 +104,17 @@ body {
     max-height: 620px;
     padding: 20px;
     position: relative;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8); 
     border-radius: 10px;
 }
 
 .close-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    left: 20px;
     cursor: pointer;
-    font-size: 24px;
-    color: #333;
+    font-size: 40px;
+    color: white;
 }
 
 .small-image {
@@ -215,14 +215,6 @@ body {
     text-align: right;
 }
 
-.popup-section-info{
-    display: none;
-}
-
-.popup-section-moves{
-    display: none;
-}
-
 .popup-section-info {
     color: black;
 }
@@ -230,3 +222,79 @@ body {
 .d-none {
     display: none;
   }
+
+.popup-section-info{
+    background-color: rgba(255, 254, 254, 0.9);
+    min-height: 250px;
+    border-radius: 15px;
+    max-height: 250px;
+}
+
+.gif-edit{
+    height: 100px;
+}
+
+.more-images-container{
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+}
+
+.more-images-title {
+    display: flex;
+    justify-content: center;
+}
+
+.more-images-title-shiny{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.moves-section {
+    background-color: rgba(255, 254, 254, 0.9);
+    min-height: 250px;
+    border-radius: 15px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.moves-edit {
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 10px 10px;
+    color: white;
+    border-radius: 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+body.popup-open {
+    overflow: hidden;
+}
+
+.arrow {
+    font-size: 50px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 0px 20px;
+    border-radius: 1000%;
+}
+
+.left {
+    margin-right: 10px; 
+    color: white;
+}
+
+.right {
+    margin-left: 10px; 
+    color: white;
+}
+
+.arrow-and-image-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
