@@ -60,3 +60,18 @@ function type2Check(type2) {
     }
     return '';
 }
+
+
+
+
+function generateImageSection(frontGif, defaultGif, title) {
+    return `
+        <div>
+            <span class="more-images-title"><b>${title}:</b></span>
+            <div class="more-images-container">
+                <img class="gif-edit" src="${frontGif}" alt="Front GIF">
+                <img class="gif-edit" src="${defaultGif}" alt="Default GIF">
+            </div>
+        </div>
+    `;
+}

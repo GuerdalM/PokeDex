@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PokeDex</title>
+    <link rel="icon" href="./img/pokeball-header.png" type="image/x-icon">
 
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,13 +14,27 @@
 </head>
 <body onload="init()">
 
-    <div id="pokeCards" class="edit-pokecards">
-        <div id="openBigCard"></div>
+
+    <header class="header">
+        <img class="header-img" src="./img/pokeball-header.png" alt="">
+        <span class="header-title">Gotta Catch 'Em All</span>
+    </header>
+    <div class="input-edit">
+        <input type="text" id="search" class="search-input" onkeydown="filterPokemon()" placeholder="Search some Pokemons...">
+    </div>
+    <div>
+        <div id="pokeCards" class="edit-pokecards">
+    </div>    
+    </div class="popup-field-edit">
+        <div id="openBigCard">
+    </div>
+    <div class="button-edit">
+        <button id="load-more-btn" onclick="loadMorePokemon()">Load More Pokemon</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="template.js"></script>
     <script src="chart.js"></script>
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
 </body>
 </html>

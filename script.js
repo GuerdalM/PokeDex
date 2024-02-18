@@ -4,14 +4,13 @@ let pokeStats = [];
 let pokeStatsName = [];
 let moveAttack = [];
 
-
 async function init() {
     await foundInGrass();
     renderPokemon();
 }
 
 async function foundInGrass() {
-    for (let i = 1; i <= showMaxPokemon; i++) {
+    for (let i = 1; i <= 200; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${i}/`;
         let response = await fetch(url);
 
@@ -32,8 +31,9 @@ function catchEmAllImage(type) {
 
 function renderPokemon() {
     const card = document.getElementById('pokeCards');
-    
-    for (let i = 0; i < foundedPokemons.length; i++) {
+    card.innerHTML = '';
+
+    for (let i = 0; i < showMaxPokemon; i++) {
         const pokemons = foundedPokemons[i];
         const name = pokemons['species']['name'];
         const pokemonImage = pokemons['sprites']['other']['official-artwork']['front_default'];
@@ -94,11 +94,11 @@ function showTab(tabId, i) {
     }
   }
 
-function pokemonStats(i) {
+
+  function pokemonStats(i) {
     const pokemon = foundedPokemons[i];
     const stats = pokemon['stats'];
     let statsHTML = '';
-
     pokeStats = [];
     pokeStatsName = [];
 
@@ -112,15 +112,13 @@ function pokemonStats(i) {
         pokeStats.push(statNumber);
         pokeStatsName.push(statName);
     }
-
     statsHTML += `
         <canvas id="myChart"></canvas>
     `;
-
     document.getElementById('popupStatistics').innerHTML = statsHTML;
-
     renderPokeStatsChart();
 }
+
 
 function collectMoves(i) {
     const pokemon = foundedPokemons[i];
@@ -155,37 +153,70 @@ function pokemonMoves(i) {
     document.getElementById('popupMoves').innerHTML = movesHTML;
 }
 
-
-
 function pokemonInfo(i) {
     const pokemon = foundedPokemons[i];
     let frontGif = pokemon['sprites']['other']['showdown']['back_default'];
     let defaultGif = pokemon['sprites']['other']['showdown']['front_default'];
     let frontGifShiny = pokemon['sprites']['other']['showdown']['front_shiny'];
     let defaultGifShiny = pokemon['sprites']['other']['showdown']['back_shiny'];
-    let informationHTML ='';
 
-    informationHTML += `
+    let informationHTML = '';
 
-    <div>
-        <span class="more-images-title"><b>Usual Version:</b></span>
-        <div class="more-images-container">
-            <img class="gif-edit" src="${frontGif}" alt="Front GIF">
-            <img class="gif-edit" src="${defaultGif}" alt="Default GIF">
-        </div>
-        <span class="more-images-title-shiny"><b>Shiny Version:</b></span>
-        <div class="more-images-container">
-            <img class="gif-edit" src="${defaultGifShiny}" alt="Default GIF Shiny">
-            <img class="gif-edit" src="${frontGifShiny}" alt="Front GIF Shiny">
-        </div>
-    </div>
-`;
+    informationHTML += generateImageSection(frontGif, defaultGif, 'Usual Version');
+    informationHTML += generateImageSection(frontGifShiny, defaultGifShiny, 'Shiny Version');
 
     document.getElementById('popupInformation').innerHTML = informationHTML;
 }
 
+document.addEventListener('click', function(event) {
+    const popupOverlay = document.getElementById('popupOverlay');
+    
+    if (event.target === popupOverlay) {
+        closePopup();
+    }
+});
 
 function closePopup() {
     document.getElementById('openBigCard').innerHTML = '';
     document.body.classList.remove('popup-open');
+}
+
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', filterPokemon);
+
+function filterPokemon() {
+    const searchInput = document.getElementById('search');
+    const searchTerm = searchInput.value.toLowerCase();
+    
+    if (searchTerm === '') {
+        renderPokemon();
+    } else {
+        const filteredPokemons = foundedPokemons.filter(pokemon => {
+            const pokemonName = pokemon.species.name.toLowerCase();
+            return pokemonName.startsWith(searchTerm);
+        });
+
+        renderFilteredPokemon(filteredPokemons);
+    }
+}
+
+function renderFilteredPokemon(filteredPokemons) {
+    const card = document.getElementById('pokeCards');
+    card.innerHTML = '';
+
+    for (let i = 0; i < filteredPokemons.length; i++) {
+        const { species, sprites, types } = filteredPokemons[i];
+        const name = species.name;
+        const pokemonImage = sprites.other['official-artwork'].front_default;
+        const type1 = types[0].type.name;
+        const type2 = types[1] ? types[1].type.name : null;
+
+        const pokemonCardHTML = createPokemonCard(i, name, pokemonImage, type1, type2);
+        card.innerHTML += pokemonCardHTML;
+    }
+}
+
+function loadMorePokemon() {
+    showMaxPokemon += 30;
+    renderPokemon();
 }
